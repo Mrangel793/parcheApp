@@ -1,16 +1,55 @@
-# myapp
+# Social Plans Flutter App
 
-A new Flutter project.
+This is a Flutter application for social plans, built with a clean architecture approach.
 
-## Getting Started
+## Setup Instructions
 
-This project is a starting point for a Flutter application.
+1. **Install Flutter:** Make sure you have Flutter installed on your machine. You can find the installation instructions [here](https://docs.flutter.dev/get-started/install).
 
-A few resources to get you started if this is your first Flutter project:
+2. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. **Install dependencies:**
+   ```bash
+   flutter pub get
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. **Run the app:**
+   ```bash
+   flutter run
+   ```
+
+## Flavors
+
+This project is configured with two flavors: `development` and `production`.
+
+* **Development:** To run the app in development mode, use the following command:
+  ```bash
+  flutter run --flavor development --target lib/main_development.dart
+  ```
+
+* **Production:** To run the app in production mode, use the following command:
+  ```bash
+  flutter run --flavor production --target lib/main_production.dart
+  ```
+
+## Project Structure
+
+The project follows the Clean Architecture principles, with the following directory structure:
+
+```
+lib
+├── src
+│   ├── core
+│   ├── features
+│   │   └── auth
+│   │       ├── data
+│   │       ├── domain
+│   │       └── presentation
+│   ├── config
+│   │   └── router
+│   └── shared
+└── main.dart
+```

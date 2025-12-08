@@ -2,105 +2,75 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:myapp/src/features/auth/presentation/forgot_password/forgot_password_controller.dart';
+import 'package:myapp/src/features/auth/data/auth_repository.dart';
 
-class ForgotPasswordScreen extends ConsumerWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final theme = Theme.of(context);
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
 
-    ref.listen<ForgotPasswordState>(forgotPasswordControllerProvider, (previous, next) {
-      next.maybeWhen(
-        success: () {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await ref.read(authRepositoryProvider).resetPassword(email: _emailController.text);
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Se ha enviado un enlace a tu correo.')),
+            const SnackBar(content: Text('Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico.')),
           );
           context.pop();
-        },
-        error: (message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
-        },
-        orElse: () {},
-      );
-    });
+        }
+      } on AuthException catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
 
-    final forgotPasswordState = ref.watch(forgotPasswordControllerProvider);
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
+        title: const Text('Restablecer contraseña'),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Restablecer Contraseña',
-                    style: GoogleFonts.oswald(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.',
-                    style: theme.textTheme.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingresa tu email';
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return 'Ingresa un email válido';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  forgotPasswordState.maybeWhen(
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    orElse: () => ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          ref.read(forgotPasswordControllerProvider.notifier).sendPasswordResetEmail(emailController.text);
-                        }
-                      },
-                      child: const Text('ENVIAR ENLACE'),
-                    ),
-                  ),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Introduce tu correo electrónico',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Este campo es obligatorio';
+                  }
+                  return null;
+                },
               ),
-            ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submit,
+                child: const Text('Enviar enlace de restablecimiento'),
+              ),
+            ],
           ),
         ),
       ),

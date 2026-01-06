@@ -114,7 +114,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               password: _passwordController.text,
               displayName: _nameController.text,
             );
-        // GoRouter redirect will handle navigation
+        // Navigate to profile setup
+        if (mounted) {
+          context.go('/profile/step-1');
+        }
       } on AuthException catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(

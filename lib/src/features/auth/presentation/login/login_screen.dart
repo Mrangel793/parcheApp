@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/src/features/auth/data/auth_repository.dart';
-import 'package:myapp/src/routing/app_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myapp/src/features/auth/presentation/register/register_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,10 +31,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await ref
-            .read(authRepositoryProvider)
-            .signInWithEmail(_emailController.text, _passwordController.text);
-        // On success, GoRouter's redirect will handle navigation
+        await ref.read(authRepositoryProvider).signInWithEmail(
+              email: _emailController.text,
+              password: _passwordController.text,
+            );
       } on AuthException catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -214,7 +214,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
         TextButton(
-          onPressed: () => context.pushNamed(AppRoute.forgotPassword.name),
+          onPressed: () => context.push('/forgot-password'),
           child: Text(
             '¿Olvidaste tu contraseña?',
             style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF4ECDC4)),
@@ -302,7 +302,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             text: 'Regístrate',
             style: GoogleFonts.poppins(color: const Color(0xFFC06BFF), fontWeight: FontWeight.w600),
             recognizer: TapGestureRecognizer()
-              ..onTap = () => context.pushNamed(AppRoute.register.name),
+              ..onTap = () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                  ),
           ),
         ],
       ),

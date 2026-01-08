@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/src/features/auth/data/auth_repository.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/src/features/auth/presentation/register/register_screen.dart';
+import 'package:myapp/src/features/auth/provider/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

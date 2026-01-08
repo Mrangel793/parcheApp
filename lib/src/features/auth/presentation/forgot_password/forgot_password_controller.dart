@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/src/features/auth/data/auth_repository.dart';
+import 'package:myapp/src/features/auth/provider/auth_provider.dart';
 
 part 'forgot_password_controller.freezed.dart';
 
@@ -20,11 +21,11 @@ class ForgotPasswordController extends StateNotifier<ForgotPasswordState> {
   Future<void> sendPasswordResetEmail(String email) async {
     state = const ForgotPasswordState.loading();
     try {
-      await _authRepository.resetPassword(email);
+      await _authRepository.resetPassword(email: email);
       state = const ForgotPasswordState.success();
     } on AuthException catch (e) {
-      state = ForgotPasswordState.error(e.toString());
-    } 
+      state = ForgotPasswordState.error(e.message);
+    }
   }
 }
 

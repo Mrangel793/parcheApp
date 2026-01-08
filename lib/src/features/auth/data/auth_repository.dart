@@ -12,6 +12,8 @@ class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
+  User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
 
   //- Sign in with email and password

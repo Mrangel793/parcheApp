@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/src/features/auth/data/auth_repository.dart';
 import 'package:myapp/src/features/auth/data/database_repository.dart';
 import 'package:myapp/src/features/auth/domain/app_user.dart';
+import 'package:myapp/src/features/auth/provider/auth_provider.dart';
 
 part 'register_controller.freezed.dart';
 
@@ -23,15 +24,16 @@ class RegisterController extends StateNotifier<RegisterState> {
   Future<void> registerWithEmailAndPassword(String email, String password, String name) async {
     state = const RegisterState.loading();
     try {
-      final userCredential = await _authRepository.signUp(email: email, password: password, displayName: name);
-      final user = userCredential.user;
+      await _authRepository.signUp(email: email, password: password, displayName: name);
+      // Get the current user after signup
+      final user = _authRepository.currentUser;
       if (user != null) {
-        final appUser = AppUser(uid: user.uid, email: user.email, displayName: name);
+        final appUser = AppUser(uid: user.uid, email: user.email ?? email, displayName: name);
         await _databaseRepository.createUser(appUser);
       }
       state = const RegisterState.success();
     } on AuthException catch (e) {
-      state = RegisterState.error(e.toString());
+      state = RegisterState.error(e.message);
     }
   }
 }

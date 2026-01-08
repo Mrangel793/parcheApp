@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "40821414030",
-    "project_id": "parcheapp-f1e9f",
-    "storage_bucket": "parcheapp-f1e9f.firebasestorage.app"
+    "project_number": "768480369704",
+    "project_id": "tribulat-397a5",
+    "storage_bucket": "tribulat-397a5.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:40821414030:android:2e5171733a0482536051df",
+        "mobilesdk_app_id": "1:768480369704:android:e15cf7c9862359ae1da91d",
         "android_client_info": {
-          "package_name": "com.example.myapp"
+          "package_name": "com.tribulat"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "768480369704-48pcfdoafd78gsh8uic51o1q7h2ggrq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDI30b3mmpqG7sbv0du3wM39TrvnI2iIG8"
+          "current_key": "AIzaSyB3lsIIYTatDPPtmYyoVik4Z6u-1COQ_QM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768480369704-48pcfdoafd78gsh8uic51o1q7h2ggrq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -56,7 +56,7 @@ class _CityAutocompleteFieldState extends State<CityAutocompleteField> {
         // Google Places Autocomplete
         GooglePlaceAutoCompleteTextField(
           textEditingController: _controller,
-          googleAPIKey: widget.googleApiKey ?? 'YOUR_API_KEY_HERE',
+          googleAPIKey: widget.googleApiKey ?? 'AIzaSyAZSgqUXXP9bk9SdbrnB0NUIF5siaS5614',
           inputDecoration: InputDecoration(
             hintText: 'Busca tu ciudad...',
             hintStyle: const TextStyle(color: Color(0xFFB2BEC3)),
@@ -79,71 +79,19 @@ class _CityAutocompleteFieldState extends State<CityAutocompleteField> {
               borderSide: const BorderSide(color: Color(0xFF4ECDC4), width: 2),
             ),
           ),
-
-          // Debouncing para evitar demasiadas requests
           debounceTime: 300,
-
-          // Filtrar solo ciudades
-          proxyURL: null,
           isLatLngRequired: false,
-
-          // Callback cuando se selecciona una ciudad
-          itmClick: (Prediction prediction) {
+          itemClick: (Prediction prediction) {
             _controller.text = prediction.description ?? '';
             widget.onCitySelected(
               prediction.description ?? '',
               prediction.placeId,
             );
           },
-
-          // Configuración de países (opcional, descomentar para filtrar por país)
-          // countries: ['co', 'mx', 'es'], // Colombia, México, España
-
-          // Configuración de tipos (solo ciudades y localidades)
           getPlaceDetailWithLatLng: (prediction) {
             // Callback opcional para obtener detalles completos
             print('Lugar seleccionado: ${prediction.description}');
           },
-
-          // Personalización de la lista de sugerencias
-          itemBuilder: (context, index, Prediction prediction) {
-            return Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: Color(0xFF4ECDC4),
-                    size: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      prediction.description ?? '',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: const Color(0xFF2D3436),
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-
-          // Separador entre sugerencias
-          seperatedBuilder: const Divider(
-            height: 1,
-            color: Color(0xFFE0E0E0),
-          ),
-
-          // Widget cuando no hay resultados
-          itemClick: (prediction) {},
         ),
 
         // Mensaje de ayuda

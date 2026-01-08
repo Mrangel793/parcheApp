@@ -12,6 +12,7 @@ import 'package:myapp/src/features/splash/splash_screen.dart';
 import 'package:myapp/src/features/user/presentation/profile_setup/screens/profile_step1_screen.dart';
 import 'package:myapp/src/features/user/presentation/profile_setup/screens/profile_step2_screen.dart';
 import 'package:myapp/src/features/user/presentation/profile_setup/screens/profile_step3_screen.dart';
+import 'package:myapp/src/features/auth/provider/auth_provider.dart';
 
 enum AppRoute {
   splash,
@@ -29,7 +30,7 @@ class GoRouterNotifier extends ChangeNotifier {
   StreamSubscription<dynamic>? _authSubscription;
 
   GoRouterNotifier(this._authRepository) {
-    _authSubscription = _authRepository.authStateChanges.listen((_) {
+    _authSubscription = _authRepository.authStateChanges().listen((_) {
       notifyListeners();
     });
   }

@@ -8,7 +8,11 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 });
 
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
-  return GoogleSignIn();
+  return GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {

@@ -19,20 +19,20 @@ dependencies:
   cloud_firestore: ^5.0.2
   firebase_storage: ^12.1.0
   firebase_messaging: ^15.0.1
-  google_sign_in: ^7.2.0
-  sign_in_with_apple: ^7.0.1
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.2
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   crypto: ^3.0.7
   simple_animations: ^5.2.0
   flutter_svg: ^2.0.10+1
   # Profile setup dependencies
-  google_places_flutter: ^3.0.0
-  image_picker: ^1.0.7
-  image_cropper: ^5.0.1
-  flutter_image_compress: ^2.1.0
-  cached_network_image: ^3.3.1
-  uuid: ^4.3.3
+  google_places_flutter: ^2.1.1
+  image_picker: ^1.1.2
+  image_cropper: ^8.0.2
+  flutter_image_compress: ^2.2.0
+  cached_network_image: ^3.2.0
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

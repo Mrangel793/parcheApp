@@ -123,7 +123,7 @@ class _PhotoPickerWidgetState extends State<PhotoPickerWidget> {
     }
   }
 
-  /// Recorta la imagen en formato circular
+  /// Recorta la imagen en formato cuadrado (se muestra circular en UI)
   Future<void> _cropImage(File imageFile) async {
     try {
       final croppedFile = await ImageCropper().cropImage(
@@ -136,12 +136,10 @@ class _PhotoPickerWidgetState extends State<PhotoPickerWidget> {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true,
-            cropStyle: CropStyle.circle,
           ),
           IOSUiSettings(
             title: 'Ajustar foto',
             aspectRatioLockEnabled: true,
-            cropStyle: CropStyle.circle,
           ),
         ],
       );

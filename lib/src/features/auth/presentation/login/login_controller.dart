@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/src/features/auth/data/auth_repository.dart';
+import 'package:myapp/src/features/auth/provider/auth_provider.dart';
 
 part 'login_controller.freezed.dart';
 
@@ -20,11 +21,11 @@ class LoginController extends StateNotifier<LoginState> {
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     state = const LoginState.loading();
     try {
-      await _authRepository.signInWithEmail(email, password);
+      await _authRepository.signInWithEmail(email: email, password: password);
       state = const LoginState.success();
     } on AuthException catch (e) {
-      state = LoginState.error(e.toString());
-    } 
+      state = LoginState.error(e.message);
+    }
   }
 
   Future<void> signInWithGoogle() async {
@@ -33,7 +34,7 @@ class LoginController extends StateNotifier<LoginState> {
       await _authRepository.signInWithGoogle();
       state = const LoginState.success();
     } on AuthException catch (e) {
-      state = LoginState.error(e.toString());
+      state = LoginState.error(e.message);
     }
   }
 
@@ -43,7 +44,7 @@ class LoginController extends StateNotifier<LoginState> {
       await _authRepository.signInWithApple();
       state = const LoginState.success();
     } on AuthException catch (e) {
-      state = LoginState.error(e.toString());
+      state = LoginState.error(e.message);
     }
   }
 }

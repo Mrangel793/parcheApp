@@ -151,7 +151,7 @@ class _ProfileStep1ScreenState extends ConsumerState<ProfileStep1Screen> {
                   });
                 },
                 // TODO: Reemplazar con tu API Key de Google Places
-                googleApiKey: 'YOUR_GOOGLE_API_KEY_HERE',
+                googleApiKey: 'AIzaSyAZSgqUXXP9bk9SdbrnB0NUIF5siaS5614',
               ),
               const SizedBox(height: 24),
 

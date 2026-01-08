@@ -1,24 +1,20 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Servicio para manejar la subida y gestión de archivos en Firebase Storage
-class StorageService {
+/// VERSIÓN SIMPLIFICADA SIN COMPRESIÓN (usar si hay problemas con flutter_image_compress)
+class StorageServiceSimple {
   final FirebaseStorage _storage;
   final Uuid _uuid = const Uuid();
 
-  StorageService(this._storage);
+  StorageServiceSimple(this._storage);
 
   /// Sube una foto de perfil a Firebase Storage
-  /// Comprime la imagen antes de subir (max 1MB, 1024x1024px)
   /// Returns: URL de descarga de la imagen
   Future<String> uploadProfilePhoto(File imageFile, String userId) async {
     try {
-      // Comprimir imagen antes de subir
-      final compressedFile = await _compressImage(imageFile);
-
       // Generar nombre único para la imagen
       final fileName = 'photo_${_uuid.v4()}.jpg';
       final path = 'users/$userId/profile/$fileName';
@@ -26,7 +22,7 @@ class StorageService {
       // Subir archivo
       final ref = _storage.ref().child(path);
       final uploadTask = await ref.putFile(
-        compressedFile,
+        imageFile,
         SettableMetadata(contentType: 'image/jpeg'),
       );
 
@@ -50,7 +46,6 @@ class StorageService {
       await ref.delete();
     } catch (e) {
       // No lanzar error si la foto no existe
-      // Esto puede pasar si se intenta borrar una foto que ya fue eliminada
       print('Warning: No se pudo eliminar la foto: ${e.toString()}');
     }
   }
@@ -65,9 +60,6 @@ class StorageService {
 
     for (final image in images) {
       try {
-        // Comprimir imagen
-        final compressedFile = await _compressImage(image);
-
         // Generar nombre único
         final fileName = 'additional_${_uuid.v4()}.jpg';
         final path = 'users/$userId/profile/$fileName';
@@ -75,7 +67,7 @@ class StorageService {
         // Subir archivo
         final ref = _storage.ref().child(path);
         final uploadTask = await ref.putFile(
-          compressedFile,
+          image,
           SettableMetadata(contentType: 'image/jpeg'),
         );
 
@@ -89,34 +81,6 @@ class StorageService {
     }
 
     return urls;
-  }
-
-  /// Comprime una imagen para reducir su tamaño
-  /// Target: max 1MB, dimensiones 1024x1024px
-  Future<File> _compressImage(File imageFile) async {
-    try {
-      final filePath = imageFile.absolute.path;
-      final lastIndex = filePath.lastIndexOf(RegExp(r'\.jp'));
-      final outPath = '${filePath.substring(0, lastIndex)}_compressed.jpg';
-
-      final result = await FlutterImageCompress.compressAndGetFile(
-        imageFile.absolute.path,
-        outPath,
-        quality: 85,
-        minWidth: 1024,
-        minHeight: 1024,
-      );
-
-      if (result == null) {
-        throw StorageException('No se pudo comprimir la imagen');
-      }
-
-      return File(result.path);
-    } catch (e) {
-      // Si falla la compresión, usar la imagen original
-      print('Warning: No se pudo comprimir la imagen, usando original: ${e.toString()}');
-      return imageFile;
-    }
   }
 
   /// Obtiene la referencia a la carpeta de perfil del usuario
@@ -140,7 +104,7 @@ final firebaseStorageProvider = Provider<FirebaseStorage>((ref) {
   return FirebaseStorage.instance;
 });
 
-/// Provider del StorageService
-final storageServiceProvider = Provider<StorageService>((ref) {
-  return StorageService(ref.watch(firebaseStorageProvider));
+/// Provider del StorageService Simple (sin compresión)
+final storageServiceSimpleProvider = Provider<StorageServiceSimple>((ref) {
+  return StorageServiceSimple(ref.watch(firebaseStorageProvider));
 });
